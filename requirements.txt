@@ -20,3 +20,4 @@ django-admin-filters
 django-admin-autocomplete-filter
 django-filter
 django-heroku
+whitenoise
