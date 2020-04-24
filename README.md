@@ -27,7 +27,7 @@ $ # virtualenv --no-site-packages env
 $ # .\env\Scripts\activate
 $ 
 $ # Install modules
-$ # Postgres as Database
+$ # Postgres as Database (Change setting.py for database connection)
 $ #pip3 install -r requirements.txt
 $
 $ # Create tables
