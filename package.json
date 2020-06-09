@@ -1,7 +1,7 @@
 {
-  "name": "DCRP Database",
+  "name": "DCRP-Database",
   "version": "1.0.0",
-  "description": "A simple UI-Ready  Django boilerplate.",
+  "description": "Training Records for the DCRP, GEM Programme using Django.",
   "scripts": {
     "lint": "eslint ."
   },
@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": 
+    "url": ""
   },
   "keywords": [
     "django",
@@ -23,7 +23,7 @@
   ],
   "author": "Diuz2beri & KishKumar69",
   "contributors": [
-    "AppSeed Support <support@appseed.us>"
+    " Support <ict4dev@spc.int, diuz2beri@gmail.com, kishan2196@gmail.com >"
   ],
   "license": "MIT"
 }

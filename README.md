@@ -8,24 +8,17 @@
 - Forms validation
 - UI Kit: **Argon Dashboard** provided by **Creative-Tim**
 
-<br />
-
-![Django Boilerplate - Open-Source Web App.](https://raw.githubusercontent.com/app-generator/static/master/products/django-boilerplate-intro.gif)
-
-<br />
-
 ## How to use it
 
 ```bash
 $ # Get the code
 $
-$ cd django-boilerplate
+$ cd django-dcrp-database
 $
 $ # Virtualenv modules installation (Unix based systems)
-$ virtualenv env
+$ virtualenv env #Linux
 $ source env/bin/activate
-$
-$ # Virtualenv modules installation (Windows based systems)
+$ Virtualenv modules installation (Windows based systems)
 $ # virtualenv --no-site-packages env
 $ # .\env\Scripts\activate
 $ 
@@ -43,12 +36,5 @@ $
 $ # Access the web app in browser: http://127.0.0.1:8000/
 ```
 
-<br />
 
-## Credits & Links
-
-- [Django Boilerplate](https://www.youtube.com/watch?v=bGGDGltRT_g) - yTube presentation
-- [Django Framework](https://www.djangoproject.com/) - Offcial website
-
-<br />
 
