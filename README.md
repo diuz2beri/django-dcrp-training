@@ -8,6 +8,12 @@
 - Forms validation
 - UI Kit: **Argon Dashboard** 
 
+You will need to install:
+Python 3.8
+PostgreSQL 12
+Django 3.0.7
+
+
 <br />
 
 ## How to use it
