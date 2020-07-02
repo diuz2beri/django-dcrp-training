@@ -27,14 +27,14 @@ def index(request):
     course_comp = ListOfParticpantsWhoCompletedCourse.objects.all()
     total_course_comp = course_comp.count()
 
-    labels = []
-    data = []
-
     country_count = Participant.objects.values('country').annotate(total_user = Count('id'))
     
-    #for country in country_count:
-     #   labels.append(country) 
-      #  data.append(total_user)
+    labels = []
+    data = []
+    
+    for i in country_count:
+        labels.append(i[country]) 
+        data.append(i[id])
         
 
 
