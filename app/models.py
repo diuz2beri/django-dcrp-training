@@ -148,12 +148,7 @@ class Organization(models.Model):
 
     def get_hostname(self):
         return "\n".join([s.hostname for s in self.host_participant.all()])
-
-    
-
-
-
-    
+  
 
 class Program(models.Model):
     project_name = models.CharField(max_length=100)
@@ -170,13 +165,10 @@ class Participant(models.Model):
     last_Name = models.CharField(max_length=100)
     country = CountryField()
     trainer = models.CharField(choices = trainer, max_length=100, )
-    gender = models.CharField(choices= gender, max_length=50)
-    
+    gender = models.CharField(choices= gender, max_length=50)    
     title = models.CharField(choices= title_Choice, max_length=100, blank=True, null=True)
     date_of_birth = models.DateField(null=True, blank=True )
-    position = models.CharField(max_length=1000)
-    
-
+    position = models.CharField(max_length=1000) 
     contact_address = models.CharField(max_length=1000, blank=True, null=True)
     work_phone = models.CharField(max_length = 30, blank=True, null=True)
     fax_number = models.CharField(max_length = 100, blank=True, null=True)
@@ -188,9 +180,12 @@ class Participant(models.Model):
     
     education_level = models.CharField(choices = education_level_choice, max_length=100, blank=True, null=True)
    
-    
     comments = models.CharField(max_length=1000, blank=True, null=True)
-    
+    #remove later
+    def get_verifed_req_count(self):
+        return id.count()
+
+
     def hostname(self):
         return "\n".join([s.hostname for s in self.host_participant.all()], [p.ListOfParticpantsWhoCompletedCourse for p in self.courseparticipant.all])
     
@@ -206,14 +201,11 @@ class Participant(models.Model):
     def get_hostname(self):
        return '%s,%s' % ("\n".join([p.session for p in self.host_particpant.all()]), "\n".join([p.ListOfParticpantsWhoCompletedCourse for p in self.courseparticipant.all()]))
     
-        #ret = ''
-
-        #print(self.hostname.all())
-
-        #for session in self.session.all():
-            #ret = ret + session.session_name + ','
-
-            #return ret[:-1]
+       #ret = ''
+       #print(self.hostname.all())
+       #for session in self.session.all():
+       #ret = ret + session.session_name + ','
+       #return ret[:-1]
         
 
     
@@ -228,8 +220,6 @@ class Project(models.Model):
     program = models.ForeignKey(Program, on_delete=models.CASCADE, blank=True, null=True)
     project_name = models.CharField(max_length=100, blank=True, null=True)
     donor = models.CharField(max_length = 100, blank=True, null=True)
-
-
     odjective = models.CharField(max_length=1000, blank=True, null=True)
     work_plan = models.CharField(max_length=1000, blank=True, null=True)
     key_result_area = models.CharField(max_length=1000, blank=True, null=True)
@@ -251,9 +241,6 @@ class Project(models.Model):
     def get_absolute_url(self):
         return reverse('Project detail', args=[str(self.project_name)])
 
-
-
- 
 class Course(models.Model):
     course_title = models.CharField(max_length= 100, blank=True, null=True)
    
@@ -289,14 +276,6 @@ class Unit(models.Model):
 
     def get_absolute_url(self):
         return reverse('Unit detail', args=[str(self.unit_name)])
-
-
-
-    
-
-
-
-    
 
 class Session(models.Model):
     name_of_activity = models.CharField(max_length=100)
@@ -336,11 +315,6 @@ class Session(models.Model):
     def get_hostname(self):
        return "\n".join([p.session for p in self.host_session.all()])
 
-    
-
-
-    
-
     #def get_absolute_url(self):
      #   return reverse('Session participant', args=[str(self.attendees)])from django.db import models
 
@@ -355,4 +329,6 @@ class ListOfParticpantsWhoCompletedCourse(models.Model):
 
     def __str__(self):
         return '%s '% (self.course)
+
+
 

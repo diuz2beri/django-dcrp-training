@@ -8,6 +8,7 @@
 - Forms validation
 - UI Kit: **Argon Dashboard** 
 
+
 You will need to install:
 Python 3.8
 PostgreSQL 12
@@ -16,19 +17,20 @@ Django 3.0.7
 
 <br />
 
+
 ## How to use it
 
 ```bash
 $ # Get the code
-$
+
+$ cd django-dcrp-database
+
 $ cd django-dcrp-training
 $ #
-$
 $ # Virtualenv modules installation (Unix based systems)
-$ virtualenv env
+$ virtualenv env #Linux
 $ source env/bin/activate
-$
-$ # Virtualenv modules installation (Windows based systems)
+$ Virtualenv modules installation (Windows based systems)
 $ # virtualenv --no-site-packages env
 $ # .\env\Scripts\activate
 $ 
@@ -54,5 +56,5 @@ $ # Access the web app in browser: http://127.0.0.1:8000/ or 127.0.0.1:<portnumb
 - Django Framework
 - CreativeTim
 
-<br />
+
 
