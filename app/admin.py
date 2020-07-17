@@ -85,7 +85,7 @@ class SessionAdmin(ImportExportModelAdmin):
     list_filter = ('name_of_activity', 'course', 'attendees_number', 'method', 'period', 'session_type')
     filter_horizontal = ['participant']
     search_fields = ['name_of_activity']
-    view_on_site = False
+    view_on_site = True
     #save_as = True
     #save_on_top = True
     #change_list_template = 'change_list_graph.html'
