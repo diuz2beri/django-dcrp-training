@@ -20,18 +20,14 @@
                   <div class="row">
                     <div class="col">
                       <h5 class="card-title text-uppercase text-muted mb-0">Total Trainings</h5>
-                      <span class="h2 font-weight-bold mb-0">{{ total_session }}</span>
+                      <span class="h2 font-weight-bold mb-0"><a herf="/">{{ total_session }}</a></span>
                     </div>
-                    <div class="col-auto">
+                     <div class="col-auto">
                       <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
                         <i class="fas fa-chart-bar"></i>
                       </div>
                     </div>
                   </div>
-                  <p class="mt-3 mb-0 text-muted text-sm">
-                    <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
-                    <span class="text-nowrap">Since last month</span>
-                  </p>
                 </div>
               </div>
             </div>
@@ -49,10 +45,7 @@
                       </div>
                     </div>
                   </div>
-                  <p class="mt-3 mb-0 text-muted text-sm">
-                    <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> 3.48%</span>
-                    <span class="text-nowrap">Since last week</span>
-                  </p>
+                  
                 </div>
               </div>
             </div>
@@ -71,21 +64,17 @@
                       </div>
                     </div>
                   </div>
-                  <p class="mt-3 mb-0 text-muted text-sm">
-                    <span class="text-warning mr-2"><i class="fas fa-arrow-down"></i> 1.10%</span>
-                    <span class="text-nowrap">Since yesterday</span>
-                  </p>
+                 
                 </div>
               </div>
             </div>
-            {{County}}
-            <div class="col-xl-3 col-lg-6">
+          <div class="col-xl-3 col-lg-6">
               <div class="card card-stats mb-4 mb-xl-0">
                 <div class="card-body">
                   <div class="row">
                     <div class="col">
-                      <h5 class="card-title text-uppercase text-muted mb-0">Users Courses Completed</h5>
-                      <span class="h2 font-weight-bold mb-0">{{total_course_comp}}</span>
+                      <h5 class="card-title text-uppercase text-muted mb-0">Courses Completed</h5>
+                      <span class="h2 font-weight-bold mb-0">{{total_course_comp}} <span class="card-title text-uppercase text-muted mb-0">Users</span></span>
                     </div>
                     <div class="col-auto">
                       <div class="icon icon-shape bg-info text-white rounded-circle shadow">
@@ -93,10 +82,7 @@
                       </div>
                     </div>
                   </div>
-                  <p class="mt-3 mb-0 text-muted text-sm">
-                    <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> 12%</span>
-                    <span class="text-nowrap">Since last month</span>
-                  </p>
+                
                 </div>
               </div>
             </div>
@@ -107,8 +93,67 @@
 
     <div class="container-fluid mt--7">
 
+     <div class="row">
+        <div class="col-5">
+          <div class="card shadow border-0">
+          <div>
+          <a href="{% url 'create_participant' %}" type="button" class="btn btn-dark btn-block">Enter New Participant</a>
+          <table class="table table-striped">
+            <thead>
+                <tr>      
+                      <th scope="col">Name</th>
+                      <th scope="col">Phone</th> 
+                      <th></th>    
+                      </tr>
+                      </thead>
+                        <tbody>
+                        {% for i in participants %}
+                            <tr>
+                                
+                                <td>{{i.first_name}}</td>
+                                <td>{{i.work_phone}}</td>
+                                <td><a class="btn btn-sm btn-primary" href = "{% url 'participant' i.id  %}" >view</td>
+      
+                              </tr> 
+                        {% endfor %}                     
+                              </tbody>
+                        </table></div>
+                        </div>
+        </div>
+          <div class="col-7">
+          <div class="card shadow border-0">
+            <a href="{% url 'create_session' %}" type="button" class="btn btn-success btn-block">Enter New Session</a>
+                  <table class="table table-striped">
+  <thead>
+    <tr>
+     
+      <th scope="col">SESSION NAME</th>
+      <th scope="col">Country</th>
+      <th scope="col">Total Participants</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for i in session %}
+            <tr>                            
+            <td>{{i.name_of_activity}}</td>
+            <td>{{i.country}}</td>
+            <td>{{i.attendees_number}}</td>     
+            <td><a class="btn btn-sm btn-primary" href = "{% url 'participant' i.id  %}" >view</td>
+           </tr> 
+    {% endfor %}      
+  </tbody>
+</table>
+
+
+          </div>
+        </div>
+      </div>
+     
+ 
+<!--Chart--><br/>
       <div class="row">
-        <div class="col-xl-8 mb-5 mb-xl-0">
+        <div class="col-xl-7 mb-5 mb-xl-0">
           <div class="card ">
             <div id="myChart">
     
@@ -134,7 +179,7 @@
             "values":["Fiji","Samoa","Tonga","Kiribati","Tuvalu","Niue","Png","vanuatu","Solomon Islans"]
             },
             "series":[  {          
-              "values":[123,34,128,32,45,100,80,46,125]
+              "values":[13,34,28,32,45,70,80,46,25]
               } 
             ]
          }
@@ -149,10 +194,8 @@
      
       
     </script>
-
-    <!--{{participants}}--> 
-    </div>
-    {{shops}}
+          </div>
+  
     </div>
     </div>
             
@@ -161,11 +204,12 @@
             <div class="card-header bg-transparent">
               <div class="row align-items-center">
                 <div class="col">
-                  <h6 class="text-uppercase text-muted ls-1 mb-1">Performance</h6>
-                  <h2 class="mb-0">Total orders</h2>
+                  <h6 class="text-uppercase text-muted ls-1 mb-1">GENDER</h6>
+                  <h2 class="mb-0">Total Gender</h2>
                 </div>
               </div>
             </div>
+
             <div class="card-body">
               <!-- Chart -->
               <div class="chart">
@@ -175,14 +219,16 @@
           </div>
         </div>
       </div>
-      
+
+<br/>
+    
+     
+
+    
       
         
+<div>
 
-
-      </div>
-
-     
 
       {% include "includes/footer.html" %}
 
