@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 """
-
+copyright @ SPC : MIT Licence
 """
 
 import os
@@ -18,7 +18,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG')
 
-ALLOWED_HOSTS = ['192.168.4.53','localhost','127.0.0.1' ]
+ALLOWED_HOSTS = ['192.168.17.70','localhost','127.0.0.1' ]
 
 # Application definition
 
@@ -34,8 +34,13 @@ INSTALLED_APPS = [
     'clear_cache',
     'django_sb_admin',
     'widget_tweaks',
-    
+    'django_filters',
+    'crispy_forms',
+    'django_saml2_auth',
+       
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
