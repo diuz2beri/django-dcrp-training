@@ -149,7 +149,16 @@ def createParticipant(request):
 ###################################################################################################
 #View for all users filter form
 ##################################################################################################
+def search_part(request):
+    user_list = Participant.objects.all()
+    user_filter = ParticipantFilter(request.GET, queryset=user_list)
+    return render(request, 'pages/search.html', {'filter': user_filter})
 
+
+def search_sess(request):
+    session_list = Session.objects.all()
+    sess_filter = sessionFilter(request.GET, queryset=session_list)
+    return render(request, 'pages/search-ses.html', {'filter': sess_filter})
 
 
 
