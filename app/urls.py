@@ -9,6 +9,12 @@ from app import views
 from django.conf.urls import url
 from django.urls import path, include
 from . import views
+from .views import get_data
+from app.views import sessionChart
+from django_filters.views import FilterView
+from app.filters import sessionFilter
+from app.filters import ParticipantFilter
+
 
 # These are the SAML2 related URLs. You can change "^saml2_auth/" regex to
 # any path you want, like "^sso_auth/", "^sso_login/", etc. (required)
@@ -29,7 +35,6 @@ urlpatterns = [
     # Avoid using your .html in your resources.
     # Or create a separate django app.
     re_path(r'^.*\.html', views.pages, name='pages'),
-    
     # The home page
     path('', views.index, name='home'),
     path('participant/<str:pk>', views.participant, name='participant'),
@@ -40,7 +45,14 @@ urlpatterns = [
     path('pdf/', views.pdf,name="pdf"),
     path('pdf_view/', views.ViewPDF.as_view(), name="pdf_view"),
     path('pdf_download/', views.DownloadPDF.as_view(), name="pdf_download"),
-]
+    path('session_search/', views.sessiontList.as_view(), name='searchView'),
+    path('participant_all/', views.participantList.as_view(), name='participant_list'),
+    path('charts/', views.sessionChart.as_view(), name='chart'),
+    url(r'^api/data/$', get_data, name='get_data'),
+    url(r'^search/$', FilterView.as_view(filterset_class=ParticipantFilter, template_name='pages/search.html'), name='search'),
+    url(r'^search_sess/$', FilterView.as_view(filterset_class=sessionFilter, template_name='pages/search-ses.html'), name='search_sess'),
+
+   ]
     
     #url(r'^admin/login/$', django_saml2_auth.views.signin)
 

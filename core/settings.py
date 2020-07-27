@@ -1,8 +1,8 @@
 # -*- encoding: utf-8 -*-
 """
-
+copyright @ SPC : MIT Licence
 """
-import django_heroku
+
 import os
 import sys
 from decouple import config
@@ -18,7 +18,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG')
 
-ALLOWED_HOSTS = ['192.168.17.72','192.168.52.125','192.168.4.53','localhost','127.0.0.1' ]
+ALLOWED_HOSTS = ['192.168.17.70','localhost','127.0.0.1' ]
 
 # Application definition
 
@@ -43,8 +43,6 @@ INSTALLED_APPS = [
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
-    # https://warehouse.python.org/project/whitenoise/
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -139,19 +137,3 @@ STATIC_ROOT = PROJECT_DIR.child('core').child('staticfiles')
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "core/static"),
 )
-
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.9/howto/static-files/
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_URL = '/static/'
-
-# Extra places for collectstatic to find static files.
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)
-
-# Activate Django-Heroku.
-django_heroku.settings(locals())
-

@@ -7,237 +7,141 @@
 
 {% block content %}
 
-    <!-- Header -->
-    <div class="header bg-gradient-primary pb-8 pt-5 pt-md-8">
-      <div class="container-fluid">
-        <div class="header-body">
-          <!-- Card stats -->
-          <div class="row">
-            <div class="col-xl-4 col-lg-6">
-              <div class="card card-stats mb-4 mb-xl-0">
-                <div class="card-body">
-                  <div class="row">
-                     <div class="col">
-                      <h5 class="card-title text-uppercase text-muted mb-0">Participant:</h5><br/>
-                      <button type="button" class="btn btn-outline-primary btn-block">Update Participant</button>
-                      <button type="button" class="btn btn-outline-danger btn-block">Delete Participant</button>
-                    </div>
-                  </div>
-                  <p class="mt-3 mb-0 text-muted text-sm">
-                    <span class="text-success mr-2"></span>
-                    
-                  </p>
+<!-- Header -->
+<div class="header bg-gradient-primary pb-8 pt-5 pt-md-8">
+  <div class="container-fluid">
+    <div class="header-body">
+      <!-- Card stats -->
+      <div class="row">
+        <div class="col-xl-4 col-lg-6">
+          <div class="card card-stats mb-4 mb-xl-0">
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <h5 class="card-title text-uppercase text-muted mb-0">Participant: {{part_data.first_name}} {{part_data.last_Name}}</h5><br/>
+                  <button type="button" class="btn btn-outline-primary btn-block">Update Participant</button>
+                  <button type="button" class="btn btn-outline-danger btn-block">Delete Participant</button>
                 </div>
               </div>
-            </div>
+              <p class="mt-3 mb-0 text-muted text-sm">
+                <span class="text-success mr-2"></span>
 
-
-            <div class="col-xl-4 col-lg-6">
-              <div class="card card-stats mb-4 mb-xl-0">
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col">
-                      <h5 class="card-title text-uppercase text-muted mb-0">Contact Information:</h5><br/>
-                      <p><h5 class="card-title text-uppercase text-muted mb-0">Email:{{part_data.email}}  </h5></p><br/>
-                      <span><h5 class="card-title text-uppercase text-muted mb-0">Phone:{{part_data.work_phone}} </h5></span>                     
-                    </div>                    
-                  </div>
-                  <p class="mt-3 mb-0 text-muted text-sm">
-                    <span class="text-danger mr-2"></span>
-                    <span class="text-nowrap"></span>
-                  </p>
-                </div>
-              </div>
+              </p>
             </div>
-
-            
-            <div class="col-xl-4 col-lg-6">
-              <div class="card card-stats mb-4 mb-xl-0">
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col">
-                      <h5 class="card-title text-uppercase text-muted mb-0">Total Trainings </h5>
-                      <span class="h2 font-weight-bold mb-0">  
-                        {{total_participant}} 
-                    </div>
-                    <div class="col-auto">
-                      <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">
-                        <i class="fas fa-users"></i>
-                      </div>
-                    </div>
-                  </div>
-                  <p class="mt-3 mb-0 text-muted text-sm">
-                    <span class="text-warning mr-2"></span>
-                    <span class="text-nowrap"></span>
-                  </p>
-                </div>
-              </div>
-            </div>
-           
           </div>
         </div>
-      </div>
-    </div>
 
-    <div class="container-fluid mt--7">
 
-      <div class="row">
-        <div class="col">
-          <div class="card shadow">
-            <div class="card-header bg-transparent">
-              <h3 class="mb-0">Search</h3>
-            </div>
+        <div class="col-xl-4 col-lg-6">
+          <div class="card card-stats mb-4 mb-xl-0">
             <div class="card-body">
-            </div>
-
-            <div class="container">
               <div class="row">
-      <div class="col-sm">
-        <form>
-                <div class="form-row">
-                <div class="col-md-4 mb-3">
-                  <label for="validationDefault01">First name</label>
-                  <input type="text" class="form-control" id="validationDefault01" placeholder="First name" value="Mark" required>
+                <div class="col">
+                  <h5 class="card-title text-uppercase text-muted mb-0">Contact Information:</h5><br/>
+                  <p><h5 class="card-title text-uppercase text-muted mb-0">Email:{{part_data.email}}  </h5></p><br/>
+                  <span><h5 class="card-title text-uppercase text-muted mb-0">Phone:{{part_data.work_phone}} </h5></span>
                 </div>
-                <div class="col-md-4 mb-3">
-                  <label for="validationDefault02">Last name</label>
-                  <input type="text" class="form-control" id="validationDefault02" placeholder="Last name" value="Otto" required>
+              </div>
+              <p class="mt-3 mb-0 text-muted text-sm">
+                <span class="text-danger mr-2"></span>
+                <span class="text-nowrap"></span>
+              </p>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col-xl-4 col-lg-6">
+          <div class="card card-stats mb-4 mb-xl-0">
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <h5 class="card-title text-uppercase text-muted mb-0">Total Trainings Attended</h5>
+                  <span class="h1 font-weight-bold mb-0">
+                        <br/>{{list_part}}<br/><br/>
                 </div>
-                <div class="col-md-4 mb-3">
-                  <label for="validationDefaultUsername">Username</label>
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text" id="inputGroupPrepend2">@</span>
-                    </div>
-                    <input type="text" class="form-control" id="validationDefaultUsername" placeholder="Username" aria-describedby="inputGroupPrepend2" required>
+                <div class="col-auto">
+                  <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">
+                    <i class="fas fa-users"></i>
                   </div>
                 </div>
               </div>
-              <div class="form-row">
-                <div class="col-md-6 mb-3">
-                  <label for="validationDefault03">City</label>
-                  <input type="text" class="form-control" id="validationDefault03" placeholder="City" required>
-                </div>
-                <div class="col-md-3 mb-3">
-                  <label for="validationDefault04">State</label>
-                  <input type="text" class="form-control" id="validationDefault04" placeholder="State" required>
-                </div>
-                <div class="col-md-3 mb-3">
-                  <label for="validationDefault05">Zip</label>
-                  <input type="text" class="form-control" id="validationDefault05" placeholder="Zip" required>
-                </div>
-              </div>
-          <div class="form-group">
-            
-              <div> <button class="btn btn-primary" type="submit">Submit form</button></div>
+              <p class="mt-3 mb-0 text-muted text-sm">
+                <span class="text-warning mr-2"></span>
+                <span class="text-nowrap"></span>
+
+
+              </p>
             </div>
           </div>
- 
-        </form>
-    </div>
+        </div>
 
-
-  </div> 
-</div>
-</div>
-</div>
-
-<br/><br/>
-  
-
-      <div class="row">
-        <div class="col">
-          <div class="card shadow">
-          
-<!--
-       Table -->
-      
-         
-            <div class="table">
-              <table class="table align-items-center table-flush">
-                <thead class="thead-light">
-                  <tr>
-                    <th scope="col">Project</th>
-                    <th scope="col">Budget</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Users</th>
-                    <th scope="col">Completion</th>
-                    <th scope="col"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th scope="row">
-                      <div class="media align-items-center">
-                        <a href="#" class="avatar rounded-circle mr-3">
-                          <img alt="Image placeholder" src="/static/assets/img/theme/bootstrap.jpg">
-                        </a>
-                        <div class="media-body">
-                          <span class="mb-0 text-sm">Argon Design System</span>
-                        </div>
-                      </div>
-                    </th>
-                    <td>
-                      $2,500 USD
-                    </td>
-                    <td>
-                      <span class="badge badge-dot mr-4">
-                        <i class="bg-warning"></i> pending
-                      </span>
-                    </td>
-                    <td>
-                      <div class="avatar-group">
-                        <a href="#" class="avatar avatar-sm" data-toggle="tooltip" data-original-title="Ryan Tompson">
-                          <img alt="Image placeholder" src="/static/assets/img/theme/team-1-800x800.jpg" class="rounded-circle">
-                        </a>
-                        
-                      </div>
-                    </td>
-                    <td>
-                      <div class="d-flex align-items-center">
-                        <span class="mr-2">60%</span>
-                        <div>
-                          <div class="progress">
-                            <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td class="text-right">
-                      <div class="dropdown">
-                        <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <i class="fas fa-ellipsis-v"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                          <a class="dropdown-item btn-sm btn-primary" href="#">Update</a>
-                          <a class="dropdown-item btn-sm btn-danger" href="#">Delete</a>
-                         </div>
-                      </div>
-                    </td>
-                  </tr>
-                  </td>
-                  </table>
-          </div>
-       </div>
       </div>
-
- 
-
-
-
+    </div>
+  </div>
 </div>
 
+<div class="container-fluid mt--7">
 
-    
-  
 
-         
 
-      {% include "includes/footer.html" %}
+  <div class="row">
 
+    <div class="col-12">
+      <div class="card shadow border-0">
+
+        <table class="table table-striped">
+          <thead>
+          <tr>
+
+            <th scope="col">SESSION NAME</th>
+            <th scope="col">SESSION TYPE</th>
+            <th scope="col">METHOD</th>
+            <th scope="col">START DATE</th>
+            <th scope="col">END DATE</th>
+            <th scope="col">COURSE</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          {% for i in session_data %}
+
+                <tr>
+                  <td>{{i.name_of_activity}}</td>
+                  <td>{{i.session_type}}</td>
+                  <td>{{i.method}}</td>
+                  <td>{{i.start_date}}</td>
+                  <td>{{i.end_date}}</td>
+                  <td>{{i.course}}</td>
+
+                </tr>
+          {% endfor %}
+
+
+          </tbody>
+        </table><br/>
+
+      </div>
     </div>
+    </div>
+
+
+
+
+
+  </div>
+
+
+
+
+
+
+
+  {% include "includes/footer.html" %}
+
+</div>
 
 {% endblock content %}
 
-<!-- Specific JS goes HERE --> 
+<!-- Specific JS goes HERE -->
 {% block javascripts %}{% endblock javascripts %}

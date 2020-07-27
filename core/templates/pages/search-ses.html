@@ -1,0 +1,119 @@
+
+{% extends 'layouts/base.html' %}
+
+        {% load crispy_forms_tags %}
+
+        {% block title %} Search {% endblock title %}
+
+        <!-- Specific CSS goes HERE -->
+        {% block stylesheets %}{% endblock stylesheets %}
+        {% load widget_tweaks %}
+
+        {% block content %}
+
+        <div class="header bg-gradient-primary pb-8 pt-5 pt-md-8">
+            <div class="container-fluid">
+                <div class="header-body">
+                    <!-- Card stats -->
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="container-fluid mt--7">
+            <div class="col">
+                <div class="card shadow">
+                    <div class="card-header border-0">
+                        <h3 class="mb-0">Session Search</h3>
+                    </div>
+                    <div class="container">
+
+                        <div class="form-group">
+
+                            <form method="get">
+                                <div class="well">
+                                    <h4 style="margin-top: 0">Filter</h4>
+                                    <div class="row">
+                                        <div class="form-group col-sm-4 col-md-3">
+                                            {{ filter.form.name_of_activity.label_tag }}
+                                            {% render_field filter.form.name_of_activity class="form-control" %}
+                                        </div>
+                                        <div class="form-group col-sm-4 col-md-3">
+                                            {{ filter.form.session_type.label_tag }}
+                                            {% render_field filter.form.session_type class="form-control" %}
+                                        </div>
+                                        <div class="form-group col-sm-4 col-md-3">
+                                            {{ filter.form.method.label_tag }}
+                                            {% render_field filter.form.method class="form-control" %}
+                                        </div>
+                                        <div class="form-group col-sm-4 col-md-3">
+                                            {{ filter.form.project.label_tag }}
+                                            {% render_field filter.form.project class="form-control" %}
+                                        </div>
+                                        <div class="form-group col-sm-8 col-md-6">
+                                            {{ filter.form.country.label_tag }}
+                                            {% render_field filter.form.country class="form-control" %}
+                                            <div>
+                                                {% for choice in filter.form.groups %}
+                                                <label class="checkbox-inline">
+                                                    {{ choice.tag }} {{ choice.choice_label }}
+                                                </label>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">
+                                        <span class="glyphicon glyphicon-search"></span> Search
+                                    </button>
+                                </div>
+                            </form>
+                            <br/>
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Session Name</th>
+                                    <th>Session Type</th>
+                                    <th>Method</th>
+                                    <th>Project</th>
+                                    <th>Details</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for sesssion in filter.qs %}
+                                <tr>
+                                    <td>{{ sesssion.name_of_activity }}</td>
+                                    <td>{{ sesssion.session_type }}</td>
+                                    <td>{{ sesssion.method }}</td>
+                                    <td>{{ sesssion.project }}</td>
+                                    <td>
+                                        <a class="btn btn-sm btn-primary" href = "{% url 'session' sesssion.id  %}" >view</a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5">No data</td>
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            <div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    {% include "includes/footer.html" %}
+
+                </div>
+
+                {% endblock content %}
+
+                <!-- Specific JS goes HERE -->
+                {% block javascripts %}{% endblock javascripts %}
+    </title>
+</head>
+<body>
+
+</body>
+</html>

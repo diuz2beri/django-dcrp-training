@@ -1,10 +1,8 @@
 # -*- encoding: utf-8 -*-
 """
 License: MIT
-Copyright (c) 2019 - present AppSeed.us
+Copyright (c) SPC
 """
-
-from django.contrib import admin
 
 # Register your models here.
 
@@ -39,6 +37,7 @@ class CompletedCourseAdmin(admin.ModelAdmin):
     view_on_site = False
     
 admin.site.register(ListOfParticpantsWhoCompletedCourse, CompletedCourseAdmin)
+
 class CourseAdmin(ImportExportModelAdmin):
     list_display = ('course_title', 'program', 'project', 'accredited')
     list_filter = ('course_title', 'program', 'project', 'accredited')
@@ -49,10 +48,13 @@ admin.site.register(Course,CourseAdmin)
 #admin.site.register(Participants)
 class SessionInline(admin.TabularInline):
     model = Session.participant.through
+
 class ParticipantInline(admin.TabularInline):
     model = Participant.organization.through
+
 class Listcourseinline(admin.TabularInline):
     model = ListOfParticpantsWhoCompletedCourse.participant_list.through
+
 class ParticipantAdmin(ImportExportModelAdmin):
     list_display = ('first_name', 'last_Name', 'gender', 'date_of_birth', 'get_organization', 'country')
     list_filter = ('gender',  'education_level', 'trainer', 'organization')
@@ -82,7 +84,7 @@ admin.site.register(Participant, ParticipantAdmin)
   #      model = Session
 class SessionAdmin(ImportExportModelAdmin):
     list_display = ('name_of_activity','day_number', 'course', 'attendees_number', 'method', 'period', 'session_type')
-    list_filter = ('name_of_activity', 'course', 'attendees_number', 'method', 'period', 'session_type')
+    list_filter = ('name_of_activity', 'course', 'attendees_number', 'method', 'period', 'session_type', 'project')
     filter_horizontal = ['participant']
     search_fields = ['name_of_activity']
     view_on_site = True
@@ -107,13 +109,10 @@ class OrganizationAdmin(admin.ModelAdmin):
     view_on_site = False
     inlines = [ParticipantInline]
     
-
 admin.site.register(Organization, OrganizationAdmin)
-
 
 class ProgramAdmin(admin.ModelAdmin):
     pass
-
 
 admin.site.register(Program, ProgramAdmin)
 

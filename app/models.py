@@ -11,7 +11,6 @@ from import_export import fields, resources
 from datetime import date
 from django.urls import reverse
 from django import forms
-
 from django.forms import ModelChoiceField
 from django_countries.fields import CountryField
 import birthday
@@ -37,7 +36,7 @@ title_Choice = (
 
 
 sector_Choice = (
-        ("CS", "Civil Service"),
+        ("NGO", "NON Goverment Orgarnization"),
         ("IO", "International Organization"),
         ("NG", "National Government"),
         ("PS", "Private Sector"),
@@ -56,13 +55,14 @@ special_general_Choice = (
         ("di","DISASTER MANAGEMENT"),
         ("ec","ECONOMICS"), 
         ("eu", "EDUCATION AND TRAINING AND PUBLIC AWARENESS"), 
-        ("el","ELECTIRCIAN"), 
+        ("el","ELECTRICIAN"),
         ("fi","FINANCE"), 
         ("fr", "FIRE AND SEARCH AND RESCUE"), 
         ("fi","FIRST AID INSTRUCTOR"), 
         ("fo","FOREIGN AFFAIRS"),
         ("he","HEALTH EDUCATION"), 
-        ("la","LAND VALUATION"), 
+        ("la","LAND VALUATION"),
+        ("lo","LOGISTICS"),
         ("ma","MANAGEMENT"), 
         ("mr","MARITIME"), 
         ("me","MEDICAL METEREOLOGICAL_SERVICES"), 
@@ -82,7 +82,8 @@ special_disaster_management_Choice = (
         ("da","DAMAGE ASSEMENT AND PLANNING"),
         ("", "DISASTER OPERATION"), 
         ("ed", "EDUCATION AND TRAINING"), 
-        ("ha","HAZARD ASSEMENT"), 
+        ("ha","HAZARD ASSESSMENT"),
+        ("lo","LOGISTICS"),
         ("mi","MITIGATION AND PREVENTION"),
         ("ne","NEEDS ANALYSIS AND IMPLEMENTATION"), 
         ("pr","PREPAREDNESS PLANNING")
@@ -99,9 +100,9 @@ trainer = (
         ("no", "No")
     )
 method_Choice = (
-        ("tc","Meeting"),
-        ("t", "Training"),
-        ("w", "Workshop"),
+        ("Meeting","Meeting"),
+        ("Training", "Training"),
+        ("Workshop", "Workshop"),
         
     )
 period_Choice = (
@@ -112,8 +113,8 @@ period_Choice = (
     )
 
 session_type_choices = (
-        ("in","In-Country"), 
-        ("ic","Regional"), 
+        ("In-Country","In-Country"),
+        ("Regional","Regional"),
        # ("na","Meeting"), 
        # ("ns","national seminar or workshop"), 
        # ("po","post grad certificate programs"), 
@@ -142,6 +143,64 @@ class Organization(models.Model):
 
     def get_hostname(self):
         return "\n".join([s.hostname for s in self.host_participant.all()])
+
+
+class Participant(models.Model):
+    title = models.CharField(choices= title_Choice, max_length=100, blank=True, null=True)
+    first_name = models.CharField(max_length=100)
+    last_Name = models.CharField(max_length=100)
+    country = CountryField()
+    position = models.CharField(max_length=1000)
+    organization = models.ManyToManyField(Organization, related_name = 'host_organization')
+    address = models.TextField(blank=True, null=True)
+    work_phone = models.CharField(max_length = 30, blank=True, null=True)
+    mobile_phone = models.CharField(max_length = 30, blank=True, null=True)
+    home_phone = models.CharField(max_length=30, blank=True, null=True)
+    email = models.EmailField(max_length=254, blank=True, null=True)
+    trainer = models.CharField(choices = trainer, max_length=100, )
+    gender = models.CharField(choices= gender, max_length=50)
+    date_of_birth = models.DateField(null=True, blank=True )
+    #contact_address = models.CharField(max_length=1000, blank=True, null=True)
+    fax_number = models.CharField(max_length = 100, blank=True, null=True)
+    #previous_employment = models.CharField(max_length=100, blank=True, null=True)
+    #role = models.ForeignKey(Role,  on_delete=models.CASCADE)
+    education_level = models.CharField(choices = education_level_choice, max_length=100, blank=True, null=True)
+    comments = models.TextField(blank=True, null=True)
+    #remove later
+    def get_verifed_req_count(self):
+        return id.count()
+
+    #def hostname(self):
+       # return "\n".join([s.hostname for s in self.host_participant.all()], [p.ListOfParticpantsWhoCompletedCourse for p in self.courseparticipant.all])
+
+    def get_course_completed(self):
+        return "\n".join([p.ListOfParticpantsWhoCompletedCourse for p in self.courseparticipant.all])
+
+    def __unicode__(self):
+        return "{0}".format(self.first_name)
+
+    def get_organization(self):
+        return "\n".join([p.organization for p in self.organization.all()])
+
+    def get_hostname(self):
+        return '%s,%s' % ("\n".join([p.session for p in self.host_particpant.all()]), "\n".join([p.ListOfParticpantsWhoCompletedCourse for p in self.courseparticipant.all()]))
+
+        #ret = ''
+        #print(self.hostname.all())
+        #for session in self.session.all():
+        #ret = ret + session.session_name + ','
+        #return ret[:-1]
+
+
+
+    def __str__(self):
+        """String for representing the Model object (in Admin site etc.)"""
+        return 'First name - %s, Surname - %s, Date of birth - %s, Gender - %s, Country - %s ' % (self.first_name,  self.last_Name, self.date_of_birth,self.gender, self.country)
+
+    #def get_absolute_url(self):
+    #    return reverse('Partcipant detail', args=[str(self.first_name)])
+
+
   
 
 class Program(models.Model):
@@ -154,66 +213,12 @@ class Program(models.Model):
     def get_absolute_url(self):
         return reverse('Project detail', args=[str(self.project_name)])
 
-class Participant(models.Model):
-    title = models.CharField(choices= title_Choice, max_length=100, blank=True, null=True)
-    first_name = models.CharField(max_length=100)
-    last_Name = models.CharField(max_length=100)
-    country = CountryField()
-    email = models.EmailField(max_length=254, blank=True, null=True)
-    work_phone = models.CharField(max_length = 30, blank=True, null=True)
-    mobile_phone = models.CharField(max_length = 30, blank=True, null=True)
-    home_phone = models.CharField(max_length=30, blank=True, null=True)
-    trainer = models.CharField(choices = trainer, max_length=100, )
-    gender = models.CharField(choices= gender, max_length=50)    
-    date_of_birth = models.DateField(null=True, blank=True )
-    position = models.CharField(max_length=1000) 
-    #contact_address = models.CharField(max_length=1000, blank=True, null=True)
-    fax_number = models.CharField(max_length = 100, blank=True, null=True)    
-    #previous_employment = models.CharField(max_length=100, blank=True, null=True)
-    organization = models.ManyToManyField(Organization, related_name = 'host_organization')
-    #role = models.ForeignKey(Role,  on_delete=models.CASCADE)
-    education_level = models.CharField(choices = education_level_choice, max_length=100, blank=True, null=True)
-    comments = models.TextField(blank=True, null=True)
-    #remove later
-    def get_verifed_req_count(self):
-        return id.count()
-
-
-    def hostname(self):
-        return "\n".join([s.hostname for s in self.host_participant.all()], [p.ListOfParticpantsWhoCompletedCourse for p in self.courseparticipant.all])
-    
-    def get_course_completed(self):
-         return "\n".join([p.ListOfParticpantsWhoCompletedCourse for p in self.courseparticipant.all])
-
-    def __unicode__(self):
-        return "{0}".format(self.first_name)
-        
-    def get_organization(self):
-        return "\n".join([p.organization for p in self.organization.all()])
-    
-    def get_hostname(self):
-       return '%s,%s' % ("\n".join([p.session for p in self.host_particpant.all()]), "\n".join([p.ListOfParticpantsWhoCompletedCourse for p in self.courseparticipant.all()]))
-    
-       #ret = ''
-       #print(self.hostname.all())
-       #for session in self.session.all():
-       #ret = ret + session.session_name + ','
-       #return ret[:-1]
-        
-
-    
-    def __str__(self):
-        """String for representing the Model object (in Admin site etc.)"""
-        return 'First name - %s, Surname - %s, Date of birth - %s, Gender - %s, Country - %s ' % (self.first_name,  self.last_Name, self.date_of_birth,self.gender, self.country)
-    
-    #def get_absolute_url(self):
-    #    return reverse('Partcipant detail', args=[str(self.first_name)])
 
 class Project(models.Model):
     program = models.ForeignKey(Program, on_delete=models.CASCADE, blank=True, null=True)
     project_name = models.CharField(max_length=100, blank=True, null=True)
     donor = models.CharField(max_length = 100, blank=True, null=True)
-    odjective = models.CharField(max_length=1000, blank=True, null=True)
+    objective = models.CharField(max_length=1000, blank=True, null=True)
     work_plan = models.CharField(max_length=1000, blank=True, null=True)
     key_result_area = models.CharField(max_length=1000, blank=True, null=True)
     output = models.CharField(max_length= 1000, blank=True, null=True)
@@ -239,7 +244,7 @@ class Course(models.Model):
     program = models.ForeignKey(Program, on_delete=models.CASCADE, blank=True, null=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, null=True, blank=True)
     accredited = models.CharField(choices= accredited, max_length= 100, blank=True, null=True)
-    description = models.CharField(max_length=1000, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
     documents = models.FileField(null=True, blank=True)
     #comments = models.CharField(max_length= 1000, blank=True, null=True)
 
@@ -270,9 +275,10 @@ class Unit(models.Model):
         return reverse('Unit detail', args=[str(self.unit_name)])
 
 class Session(models.Model):
+    readonly_fields = ('id',)
     name_of_activity = models.CharField(max_length=100)
     session_type = models.CharField(choices=session_type_choices, max_length=50, blank=True, null=True)
-    method = models.CharField(choices= method_Choice, blank=True, null=True, max_length=50)   
+    method = models.CharField(choices= method_Choice, blank=True, null=True, max_length=50)
     description = models.TextField(blank=True, null=True)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     course_unit_names = models.ForeignKey(Unit, on_delete=models.CASCADE, blank=True, null=True)
@@ -281,18 +287,21 @@ class Session(models.Model):
     start_date = models.DateField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
     attendees_number = models.IntegerField(default = 1, blank=True, null=True)
-    period = models.CharField(choices= period_Choice, blank=True, null=True, max_length=50)   
+    period = models.CharField(choices= period_Choice, blank=True, null=True, max_length=50)
     comment = models.CharField(max_length=1000, blank=True, null=True)
     #participant = models.ManyToManyRel(Participant, torelated_name=None)
     participant = models.ManyToManyField(Participant, related_name='host_participant')
     documents = models.FileField(null=True, blank=True)
+    project = models.ForeignKey(Project, related_name='fund_project', null=True, blank=True, on_delete=models.DO_NOTHING)
+
     #pdf = models.FileField()
     def __unicode__(self):
         return "{0}".format(self.title)
 
     def get_participant(self):
+
         return "\n".join([p.first_name for p in self.participant.all()])
-    
+
     def __str__(self):
      #   """String for representing the Model object (in Admin site etc.)"""
         return ' %s ' % (self.name_of_activity)

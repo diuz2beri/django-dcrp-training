@@ -1,6 +1,6 @@
 {% extends 'layouts/base.html' %}
 
-<!--{% block title %} Search {% endblock title %} -->
+{% block title %} Search {% endblock title %}
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -10,6 +10,8 @@
        <div class="header bg-gradient-primary pb-8 pt-5 pt-md-8">
       <div class="container-fluid">
         <div class="header-body">
+
+
           <!-- Card stats -->
           
         </div>
@@ -22,46 +24,53 @@
         <div class="col">
           <div class="card shadow">
             <div class="card-header bg-transparent">
-              <h3 class="mb-0">Search</h3>
+              <h3 class="mb-0">{{session_data.name_of_activity}}</h3>
             </div>
             <div class="card-body">
             </div>
 
-            <div class="container">
-              <div class="row">
-      <div class="col-sm">
-        <form>
-                <div class="form-row">
-                <div class="col-md-3 mb-3">
-                  <label for="validationDefault01">First name</label>
-                  <input type="text" class="form-control" id="validationDefault01" placeholder="First name" value="Mark" required>
-                </div>
-                <div class="col-md-3 mb-3">
-                  <label for="validationDefault02">Country</label>
-                  <input type="text" class="form-control" id="validationDefault02" placeholder="Last name" value="AUS" required>
-                </div>
-                 <div class="col-md-3 mb-3">
-                  <label for="validationDefault02">Session</label>
-                  <input type="text" class="form-control" id="validationDefault02" placeholder="Last name" value="BSRP" required>
-                </div>
-                <div class="col-md-3 mb-3">
-                  <label for="validationDefaultUsername">Username</label>
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text" id="inputGroupPrepend2">@</span>
-                    </div>
-                    <input type="text" class="form-control" id="validationDefaultUsername" placeholder="Username" aria-describedby="inputGroupPrepend2" required>
+              <div class="col-12">
+                  <div class="card shadow border-0">
+
+                      <table class="table table-striped">
+                          <thead>
+                          <tr>
+
+                              <th scope="col">SESSION NAME</th>
+                              <th scope="col">SESSION TYPE</th>
+                              <th scope="col">METHOD</th>
+                              <th scope="col">START DATE</th>
+                              <th scope="col">END DATE</th>
+                              <th scope="col">COURSE</th>
+                              <th scope="col">Total Participants</th>
+                              <th></th>
+                          </tr>
+                          </thead>
+                          <tbody>
+
+                          <tr>
+                              <td>{{session_data.name_of_activity}}</td>
+                              <td>{{session_data.session_type}}</td>
+                              <td>{{session_data.method}}</td>
+                              <td>{{session_data.start_date}}</td>
+                              <td>{{session_data.end_date}}</td>
+                              <td>{{session_data.course}}</td>
+                              <td>{{session_data.attendees_number}}</td>
+                              <td></td>
+                          </tr>
+
+                          </tbody>
+                      </table><br/>
+                      <td>{{session_data.get_participant}}</td>
+
                   </div>
-                </div>
               </div>
-              
-          <div class="form-group">
-            
-              <div> <button class="btn btn-primary" type="submit">Submit Seach</button></div>
-            </div>
-          </div>
- 
-        </form>
+              <div>
+                  <br/><br/>
+
+
+            <div class="container">
+                {{myFilter.Form}}
     </div>
 
 
@@ -80,43 +89,10 @@
 
      <div class="row">
         
-          <div class="col-12">
-          <div class="card shadow border-0">
-            
-                  <table class="table table-striped">
-  <thead>
-    <tr>
-     
-      <th scope="col">SESSION NAME</th>
-      <th scope="col">SESSION TYPE</th>
-      <th scope="col">METHOD</th>
-      <th scope="col">START DATE</th>
-      <th scope="col">END DATE</th>
-      <th scope="col">COURSE</th>
-      <th scope="col">Total Participants</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for i in session_data %}
-            <tr>                            
-            <td>{{i.name_of_activity}}</td>
-            <td>{{i.session_type}}</td>
-            <td>{{i.method}}</td>
-            <td>{{i.start_date}}</td>
-            <td>{{i.end_date}}</td>
-            <td>{{i.course}}</td>
-            <td>{{i.attendees_number}}</td>     
-           
-           </tr> 
-    {% endfor %}      
-  </tbody>
-</table>
-</div>
-</div>
 
 
-         
+
+
         
      
 
