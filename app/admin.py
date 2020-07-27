@@ -4,17 +4,12 @@ License: MIT
 Copyright (c) SPC
 """
 
-# Register your models here.
-
+#admin.site.register(Course)
+#from import_export.admin import resources, ImportExportModelAdmin
 from admin_auto_filters.filters import AutocompleteFilter
-
-# Register your models here.
-
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
-#from import_export.admin import resources, ImportExportModelAdmin
 from .models import Course, Participant,  Session, Project, Organization, Program, Unit, ListOfParticpantsWhoCompletedCourse
-#admin.site.register(Course)
 
 class SessionFilter(AutocompleteFilter):
     title = 'Session'
@@ -87,6 +82,7 @@ class SessionAdmin(ImportExportModelAdmin):
     list_filter = ('name_of_activity', 'course', 'attendees_number', 'method', 'period', 'session_type', 'project')
     filter_horizontal = ['participant']
     search_fields = ['name_of_activity']
+    filter_horizontal = ['course_units']
     view_on_site = True
     #save_as = True
     #save_on_top = True

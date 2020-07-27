@@ -1,18 +1,19 @@
 # -*- encoding: utf-8 -*-
 """
 License: MIT
-Copyright (c) 2019 - present AppSeed.us
+
 """
-import pandas as pd
-import itertools, operator
-import django_saml2_auth.views
-from django.http import HttpResponse, JsonResponse
-from io import BytesIO
-from django.template.loader import get_template
-from django.views import View
-from xhtml2pdf import pisa
+#from django_filters.views import FilterView
+#from io import BytesIO
+#from django.template.loader import get_template
+#from django.views import View
+#from xhtml2pdf import pisa
+#import pandas as pd
+#import itertools, operator
+#import django_saml2_auth.views
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import redirect
 from django.template import loader
 from .models import *
 from django.db.models import Count, Sum
@@ -20,10 +21,7 @@ from .forms import SessionForm
 from .forms import ParticipantForm
 from django.views import generic
 from .filters import ParticipantFilter, sessionFilter
-from django_filters.views import FilterView
 from django.views.generic import TemplateView
-
-# ...
 
 @login_required(login_url="/login/")
 def index(request):
@@ -39,7 +37,7 @@ def index(request):
     course_comp = ListOfParticpantsWhoCompletedCourse.objects.all()
     total_course_comp = course_comp.count()
 
-    country_count = Participant.objects.values('country').annotate(total_user = Count('id')).order_by('country')
+    #country_count = Participant.objects.values('country').annotate(total_user = Count('id')).order_by('country')
 
     context = {"session": session, "participants": participants, "total_participant":total_participant, "total_courses": total_courses, "total_session": total_session, "total_course_comp": total_course_comp, }
     return render(request, "index.html", context)
@@ -160,11 +158,6 @@ def search_sess(request):
     sess_filter = sessionFilter(request.GET, queryset=session_list)
     return render(request, 'pages/search-ses.html', {'filter': sess_filter})
 
-
-
-
-
-
 ##################################################################################################
 #Participant List Generic View
 ##################################################################################################
@@ -194,8 +187,6 @@ class sessionChart(TemplateView):
         context = super().get_context_data(**kwargs)
         context["qs"] = Session.objects.all()
         return context
-
-    
 
 
 ##################################################################################################
@@ -253,13 +244,11 @@ class DownloadPDF(View):
 		response['Content-Disposition'] = content
 		return response
 
-
-
 def pdf(request):
 	context = {}
 	return render(request, 'pages/pdf.html', context)
 
-#Filter-003
+
 
 
     
