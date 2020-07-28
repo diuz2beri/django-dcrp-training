@@ -26,7 +26,9 @@ $ # Get the code
 $ cd django-dcrp-database
 
 $ cd django-dcrp-training
-$ #
+$
+$ #Create a virtual enviroment 
+$
 $ # Virtualenv modules installation (Unix based systems)
 $ virtualenv env #Linux
 $ source env/bin/activate
@@ -36,6 +38,7 @@ $ # .\env\Scripts\activate
 $ 
 $ # Install modules
 $ # Postgres as Database (Change setting.py for database connection)
+
 $ #pip3 install -r requirements.txt
 $
 $ # Create tables
@@ -55,6 +58,7 @@ $ # Access the web app in browser: http://127.0.0.1:8000/ or 127.0.0.1:<portnumb
 - Django Boilerplate
 - Django Framework
 - CreativeTim
+- Appspeed
 
 
 
