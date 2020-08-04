@@ -56,7 +56,8 @@
                     <div class="col">
                       <h5 class="card-title text-uppercase text-muted mb-0">Total Trained </h5>
                       <span class="h2 font-weight-bold mb-0">  
-                        {{total_participant}} 
+                        {{total_participant}}
+                      </span>
                     </div>
                     <div class="col-auto">
                       <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">
@@ -94,7 +95,7 @@
     <div class="container-fluid mt--7">
 
      <div class="row">
-        <div class="col-5">
+        <div class="col-6">
           <div class="card shadow border-0">
           <div>
           <a href="{% url 'create_participant' %}" type="button" class="btn btn-dark btn-block">Enter New Participant</a>
@@ -115,7 +116,7 @@
                                 <td>{{i.first_name}}</td>
                                 <td>{{i.email}}</td>
                                 <!--<td>{{i.hostname}}</td>-->
-                                <td><a class="btn btn-sm btn-primary" href = "{% url 'participant' i.id  %}" >view</td>
+                            <td><a class="btn btn-sm btn-primary" href = "{% url 'participant' i.id  %}" >view</a></td>
       
                               </tr> 
                         {% endfor %}                     
@@ -123,7 +124,7 @@
                         </table>
                     </div></div>
         </div>
-                                  <div class="col-7">
+                                  <div class="col-6">
                                   <div class="card shadow border-0">
                                     <a href="{% url 'create_session' %}" type="button" class="btn btn-success btn-block">Enter New Session</a>
                                           <table class="table table-striped">
@@ -132,9 +133,8 @@
 
                               <th scope="col">SESSION NAME</th>
                               <th scope="col">Country</th>
-                              <th scope="col">Attended</th>
-                                <th></th>
-                              <th></th>
+                              <th>DETAILS</th>
+
                             </tr>
                           </thead>
                           <tbody>
@@ -142,9 +142,9 @@
                                     <tr>
                                     <td>{{i.name_of_activity}}</td>
                                     <td>{{i.country}}</td>
-                                    <td>{{i.attendees_number}}</td>
+                                    <!--<td>{{i.attendees_number}}</td>-->
                                     <!--<td>{{i.participant.last_Name|linebreaks}}</td>-->
-                                    <td><a class="btn btn-sm btn-primary" href = "{% url 'session' i.id  %}" >view</td>
+                                        <td><a class="btn btn-sm btn-primary" href = "{% url 'session' i.id  %}" >view</a></td>
                                     </tr>
                             {% endfor %}
                           </tbody>
@@ -158,7 +158,7 @@
  
 <!--Chart--><br/>
       <div class="row">
-        <div class="col-xl-7 mb-5 mb-xl-0">
+        <div class="col-xl-8 mb-5 mb-xl-0">
           <div class="card ">
             <div id="myChart">
     
@@ -239,9 +239,9 @@
 
 
 </div>
-    
-      
-        
+
+
+    </div>
 <div>
 
 

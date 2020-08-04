@@ -1,20 +1,21 @@
 # -*- encoding: utf-8 -*-
 """
 License: MIT
-Copyright (c) 2019 - present AppSeed.us
 """
 
-from django.db import models
-from django.contrib.auth.models import User
-from import_export import fields, resources
+
+#rom django.contrib.auth.models import User
+#from import_export import fields, resources
 # Create your models here.
-from datetime import date
-from django.urls import reverse
-from django import forms
-from django.forms import ModelChoiceField
+#from datetime import date
+#from django import forms
+#from django.forms import ModelChoiceField
+#import birthday
+#from import_export.widgets import ManyToManyWidget
 from django_countries.fields import CountryField
-import birthday
-from import_export.widgets import ManyToManyWidget
+from django.urls import reverse
+from django.db import models
+
 accredited = (
 
     ("y", "Yes"),
@@ -152,6 +153,7 @@ class Participant(models.Model):
     country = CountryField()
     position = models.CharField(max_length=1000)
     organization = models.ManyToManyField(Organization, related_name = 'host_organization')
+    #organization_name = models.ForeignKey(Organization, on_delete=models.DO_NOTHING, blank=True, null=True)
     address = models.TextField(blank=True, null=True)
     work_phone = models.CharField(max_length = 30, blank=True, null=True)
     mobile_phone = models.CharField(max_length = 30, blank=True, null=True)
@@ -168,7 +170,7 @@ class Participant(models.Model):
     comments = models.TextField(blank=True, null=True)
     #remove later
     def get_verifed_req_count(self):
-        return id.count()
+        return id.Count()
 
     #def hostname(self):
        # return "\n".join([s.hostname for s in self.host_participant.all()], [p.ListOfParticpantsWhoCompletedCourse for p in self.courseparticipant.all])
@@ -184,14 +186,6 @@ class Participant(models.Model):
 
     def get_hostname(self):
         return '%s,%s' % ("\n".join([p.session for p in self.host_particpant.all()]), "\n".join([p.ListOfParticpantsWhoCompletedCourse for p in self.courseparticipant.all()]))
-
-        #ret = ''
-        #print(self.hostname.all())
-        #for session in self.session.all():
-        #ret = ret + session.session_name + ','
-        #return ret[:-1]
-
-
 
     def __str__(self):
         """String for representing the Model object (in Admin site etc.)"""
@@ -265,12 +259,6 @@ class Unit(models.Model):
     def __str__(self):
         return '%s %s'% (self.course, self.unit_name)
 
-
-
-    #def __str__(self):
-        #"""String for representing the Model object (in Admin site etc.)"""
-     #   return self.unit_name
-
     def get_absolute_url(self):
         return reverse('Unit detail', args=[str(self.unit_name)])
 
@@ -282,14 +270,14 @@ class Session(models.Model):
     description = models.TextField(blank=True, null=True)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     course_unit_names = models.ForeignKey(Unit, on_delete=models.CASCADE, blank=True, null=True)
+    course_units = models.ManyToManyField(Unit, related_name='course_units')
     country = CountryField()
     day_number = models.CharField( max_length=100, blank=True, null=True)
     start_date = models.DateField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
-    attendees_number = models.IntegerField(default = 1, blank=True, null=True)
+    attendees_number = models.IntegerField(default=1, blank=True, null=True)
     period = models.CharField(choices= period_Choice, blank=True, null=True, max_length=50)
     comment = models.CharField(max_length=1000, blank=True, null=True)
-    #participant = models.ManyToManyRel(Participant, torelated_name=None)
     participant = models.ManyToManyField(Participant, related_name='host_participant')
     documents = models.FileField(null=True, blank=True)
     project = models.ForeignKey(Project, related_name='fund_project', null=True, blank=True, on_delete=models.DO_NOTHING)
@@ -297,6 +285,12 @@ class Session(models.Model):
     #pdf = models.FileField()
     def __unicode__(self):
         return "{0}".format(self.title)
+
+
+    def get_part_list(self):
+
+
+        return self.participant.all()
 
     def get_participant(self):
 
@@ -308,6 +302,7 @@ class Session(models.Model):
 
     def get_absolute_url(self):
         return reverse('Session detail', args=[str(self.name_of_activity)])
+
     def get_hostname(self):
        return "\n".join([p.session for p in self.host_session.all()])
 
@@ -320,11 +315,13 @@ class ListOfParticpantsWhoCompletedCourse(models.Model):
     sessions = models.ManyToManyField(Session, related_name = 'host_session')
     participant_list = models.ManyToManyField(Participant, related_name='courseparticipant')
 
-    def get_participant(self):
-        return "\n".join([p.first_name for p in self.participant_list.all()])
+    #def get_participant(self):
+      #  return "\n".join([p.first_name for p in self.participant_list.all()])
 
     def __str__(self):
         return '%s '% (self.course)
+
+
 
 
 
