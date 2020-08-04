@@ -1,7 +1,6 @@
 # -*- encoding: utf-8 -*-
 """
 License: MIT
-Copyright (c) 2019 - present AppSeed.us
 """
 
 
@@ -154,6 +153,7 @@ class Participant(models.Model):
     country = CountryField()
     position = models.CharField(max_length=1000)
     organization = models.ManyToManyField(Organization, related_name = 'host_organization')
+    #organization_name = models.ForeignKey(Organization, on_delete=models.DO_NOTHING, blank=True, null=True)
     address = models.TextField(blank=True, null=True)
     work_phone = models.CharField(max_length = 30, blank=True, null=True)
     mobile_phone = models.CharField(max_length = 30, blank=True, null=True)
@@ -186,14 +186,6 @@ class Participant(models.Model):
 
     def get_hostname(self):
         return '%s,%s' % ("\n".join([p.session for p in self.host_particpant.all()]), "\n".join([p.ListOfParticpantsWhoCompletedCourse for p in self.courseparticipant.all()]))
-
-        #ret = ''
-        #print(self.hostname.all())
-        #for session in self.session.all():
-        #ret = ret + session.session_name + ','
-        #return ret[:-1]
-
-
 
     def __str__(self):
         """String for representing the Model object (in Admin site etc.)"""
@@ -278,12 +270,12 @@ class Session(models.Model):
     description = models.TextField(blank=True, null=True)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     course_unit_names = models.ForeignKey(Unit, on_delete=models.CASCADE, blank=True, null=True)
-    course_units = models.ManyToManyField(Unit, related_name = 'course_units')
+    course_units = models.ManyToManyField(Unit, related_name='course_units')
     country = CountryField()
     day_number = models.CharField( max_length=100, blank=True, null=True)
     start_date = models.DateField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
-    attendees_number = models.IntegerField(default = 1, blank=True, null=True)
+    attendees_number = models.IntegerField(default=1, blank=True, null=True)
     period = models.CharField(choices= period_Choice, blank=True, null=True, max_length=50)
     comment = models.CharField(max_length=1000, blank=True, null=True)
     participant = models.ManyToManyField(Participant, related_name='host_participant')
@@ -293,6 +285,12 @@ class Session(models.Model):
     #pdf = models.FileField()
     def __unicode__(self):
         return "{0}".format(self.title)
+
+
+    def get_part_list(self):
+
+
+        return self.participant.all()
 
     def get_participant(self):
 

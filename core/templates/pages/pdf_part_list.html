@@ -1,0 +1,82 @@
+<head>
+    <style>
+    @page {
+        size: a4 portrait;
+        @frame header_frame {           /* Static Frame */
+            -pdf-frame-content: header_content;
+            left: 50pt; width: 512pt; top: 50pt; height: 40pt;
+        }
+        @frame content_frame {          /* Content Frame */
+            left: 50pt; width: 512pt; top: 90pt; height: 632pt;
+        }
+        @frame footer_frame {           /* Another static Frame */
+            -pdf-frame-content: footer_content;
+            left: 50pt; width: 512pt; top: 772pt; height: 20pt;
+        }
+    }
+</style>
+</head>
+
+<!-- Content for Static Frame 'header_frame' -->
+
+        <body>
+        <!-- Content for Static Frame 'header_frame' -->
+        <div id="header_content">
+            <h3>Filtered Participants Result </h3>
+
+        </div>
+
+        <!-- Content for Static Frame 'footer_frame' -->
+        <div id="footer_content">(c) - page <pdf:pagenumber>
+            of <pdf:pagecount>
+        </div>
+
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>NAME</th>
+                <th>EMAIL</th>
+                <th>POSITION</th>
+                <th>COUNTRY</th>
+                <th>GENDER</th>
+                <th>ORGANIZATION</th>
+            <hr>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in filter.qs %}
+            <tr>
+                <td>{{ item.first_name }} {{ item.last_Name }}</td>
+                <td>{{ item.email }}</td>
+                <td>{{ item.position }}</td>
+                <td>{{ item.country.name }}</td>
+                <td>{{ item.gender}}</td>
+                <td>{{ item.get_organization}}</td>
+
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">No data</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+
+
+        <p><strong>  </strong></p>
+        </body>
+
+
+        </tr>
+
+    </tbody>
+</table><br/>
+
+<hr>
+
+<p><strong>Total Participants: {{total_session}}</strong></p>
+
+<hr>
+</body>
+

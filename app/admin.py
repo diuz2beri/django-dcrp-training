@@ -58,25 +58,9 @@ class ParticipantAdmin(ImportExportModelAdmin):
     inlines = [SessionInline, Listcourseinline]
     view_on_site = False
 
-    #def session_display(self, obj):
-     #   return ", ".join([
-      #      Session.name_of_activity for Session in obj.Session.all()
-       # ])
-    #session_display.short_description = "Session"
-    #save_as = True
-    #save_on_top = True
-    #change_list_template = 'change_list_graph.html'
-    #search_fields = (
-     #   ('f','first_name'),
-    #    ('l', 'last_name')
-   # )
-admin.site.register(Participant, ParticipantAdmin)
-#admin.site.register(Program)
-#admin.site.register(Session)
-#class SessionResource(resources.ModelResource):
 
- #   class Meta:
-  #      model = Session
+admin.site.register(Participant, ParticipantAdmin)
+
 class SessionAdmin(ImportExportModelAdmin):
     list_display = ('name_of_activity','day_number', 'course', 'attendees_number', 'method', 'period', 'session_type')
     list_filter = ('name_of_activity', 'course', 'attendees_number', 'method', 'period', 'session_type', 'project')
@@ -84,12 +68,9 @@ class SessionAdmin(ImportExportModelAdmin):
     search_fields = ['name_of_activity']
     filter_horizontal = ['course_units']
     view_on_site = True
-    #save_as = True
-    #save_on_top = True
-    #change_list_template = 'change_list_graph.html'
-    #resource_class =
+
 admin.site.register(Session, SessionAdmin)
-#admin.site.register(Project)
+
 class ProjectAdmin(ImportExportModelAdmin):
     list_display = ('program', 'project_name')
     list_filter = ('program', 'project_name')
@@ -97,7 +78,7 @@ class ProjectAdmin(ImportExportModelAdmin):
     view_on_site = False
 
 admin.site.register(Project, ProjectAdmin)
-# Register your models here.
+
 
 class OrganizationAdmin(admin.ModelAdmin):
     list_display = ('organization', 'sector','special_general', 'special_disaster_management')

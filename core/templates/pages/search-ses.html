@@ -29,11 +29,13 @@
                     </div>
                     <div class="container">
 
+                                            <br/>
+
                         <div class="form-group">
 
                             <form method="get">
                                 <div class="well">
-                                    <h4 style="margin-top: 0">Filter</h4>
+                                    <h4 style="margin-top: 0">{{ title }}</h4>
                                     <div class="row">
                                         <div class="form-group col-sm-4 col-md-3">
                                             {{ filter.form.name_of_activity.label_tag }}
@@ -63,9 +65,15 @@
                                             </div>
                                         </div>
                                     </div>
+
                                     <button type="submit" class="btn btn-primary">
                                         <span class="glyphicon glyphicon-search"></span> Search
                                     </button>
+                                    <a class="btn btn-info"  href="{% url 'export_csv' %}?{{ request.GET.urlencode }}">Export CSV</a>
+                                    <a class="btn btn-success"  href="{% url 'ses_download' %}?{{ request.GET.urlencode }}">Export PDF</a>
+                                    <a href ="{% url 'pdf_download' %}" class ="btn btn-primary">All Training Report</a>
+
+
                                 </div>
                             </form>
                             <br/>
@@ -106,14 +114,10 @@
                     {% include "includes/footer.html" %}
 
                 </div>
+            </div>
 
                 {% endblock content %}
 
                 <!-- Specific JS goes HERE -->
                 {% block javascripts %}{% endblock javascripts %}
-    </title>
-</head>
-<body>
 
-</body>
-</html>
