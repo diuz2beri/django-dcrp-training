@@ -5,15 +5,6 @@ License: MIT
 """
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-# from django_filters.views import FilterView
-# from io import BytesIO
-# from django.template.loader import get_template
-# from django.views import View
-# from xhtml2pdf import pisa
-# import pandas as pd
-# import itertools, operator
-# import django_saml2_auth.views
-# from django.db.models import Count, Sum
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.shortcuts import render
@@ -25,6 +16,7 @@ from app.utils import render_to_pdf
 from .filters import ParticipantFilter, sessionFilter
 from .forms import ParticipantForm
 from .forms import SessionForm
+from django.db.models import Sum, Count
 from .models import *
 import csv
 import datetime
@@ -48,9 +40,31 @@ def index(request):
     course_comp = ListOfParticpantsWhoCompletedCourse.objects.all()
     total_course_comp = course_comp.count()
 
+    labels = []
+    data = []
+
+    queryset = Session.objects.values('country').annotate(number=Count('id', distinct=True)).order_by('-number')
+    for i in queryset:
+        labels.append(i['country'])
+        data.append(i['number'])
+
+
+    labels2 = []
+    data2 = []
+
+
+    result = Participant.objects.values('gender').annotate(number=Count('gender')).order_by('gender')[:3]
+    for i in result:
+        labels2.append(i['gender'])
+        data2.append(i['number'])
+
+
+        #qs = ModelB.objects.values('gender').annotate(cnt=Count('id')).order_by('txt_1', 'txt_2')
+
+
     # country_count = Participant.objects.values('country').annotate(total_user = attendees_number )
 
-    context = {"session": session, "participants": participants, "total_participant": total_participant,
+    context = {'result': result,"session": session, "participants": participants, "total_participant": total_participant, 'data2': data2, 'labels2': labels2,'data': data, 'labels': labels,
                "total_courses": total_courses, "total_session": total_session, "total_course_comp": total_course_comp, }
     return render(request, "index.html", context)
 
@@ -84,6 +98,10 @@ def pages(request):
 # Participant View to edit on template./ create session / create participant
 ############################################################################################
 
+##########################################
+# Participant query results              #
+##########################################
+
 def participant(request, pk):
     part_data = Participant.objects.get(id=pk)
     list_part = Session.objects.filter(participant=pk).count()
@@ -93,16 +111,45 @@ def participant(request, pk):
                   {'session_data': session_data, 'list_part': list_part, 'part_data': part_data})
 
 
-# Session View to edit on template.
+##########################################
+# Session query reults                   #
+##########################################
+
+
 def sessionView(request, pk):
     session_data = Session.objects.get(id=pk)
     sesion = Session.objects.all()
     list_part = 2
     myFilter = sessionFilter(request.GET, queryset=sesion)
     sesion = sessionFilter.qs
+    #ses_count = Session.objects.get('id').annotate(number=Count(Session.objects.all('participant')).order_by("id")
 
     context = {'myFilter': myFilter, 'list_part': list_part, 'session_data': session_data, "sesion": sesion}
     return render(request, 'pages/maps.html', context)
+
+
+##########################################
+# Download Participant List              #
+##########################################
+
+class ViewPDFSesion(View):
+
+    def get(self, request, *args, **kwargs):
+        template = ('pages/pdf_participant_list.html')
+        session_data = Session.objects.get(id=kwargs['id'])
+        date = datetime.date.today()
+        date = datetime.date.strftime(date, '%d-%b-%Y')
+
+        context = {
+            'session_data': session_data,
+            'date': date,
+                   }
+        pdf = render_to_pdf(template, context)
+        response = HttpResponse(pdf, content_type='application/pdf')
+        filename = "Participants-List-" + str(session_data.name_of_activity) + ".pdf"
+        content = "attachment; filename=%s" % (filename)
+        response['Content-Disposition'] = content
+        return (response)
 
 
 def deleteParticipant(request):
@@ -123,6 +170,10 @@ def resultData(request):
 # View for all forms
 ##################################################################################################
 
+#################
+# session form  #
+#################
+
 def createSession(request):
     form = SessionForm
     if request.method == 'POST':
@@ -137,7 +188,10 @@ def createSession(request):
     return render(request, 'pages/session.html', context)
 
 
-# participant form
+##########################################
+# participant form                       #
+##########################################
+
 
 def createParticipant(request):
     formNew = ParticipantForm
@@ -153,14 +207,13 @@ def createParticipant(request):
     return render(request, 'pages/participant_form.html', context)
 
 
-###################################################################################################
-# View for all users filter form
-##################################################################################################
+################################################
+# Participant Filter # csv export # pdf export #
+################################################
 def search_part(request):
     user_list = Participant.objects.all()
     user_filter = ParticipantFilter(request.GET, queryset=user_list)
     return render(request, 'pages/search.html', {'filter': user_filter})
-
 
 
 def export_part_csv(request):
@@ -170,26 +223,32 @@ def export_part_csv(request):
     responce = HttpResponse(content_type='text/csv')
     responce['Content-Disposition'] = 'attachment; filename=session search' + str(datetime.datetime.now()) + '.csv'
     writer = csv.writer(responce)
-    writer.writerow(['Name', 'Email', 'Position',  'County', 'Gender'])
+    writer.writerow(['Name', 'Email', 'Position', 'County', 'Gender'])
 
     for item in participants.qs:
-        writer.writerow([item.first_name + item.last_Name, item.email, item.position, item.country.name, item.gender])
+        writer.writerow(
+            [item.first_name + ' ' + item.last_Name, item.email, item.position, item.country.name, item.gender])
     return responce
 
-# Automaticly downloads to PDF file
+
+##################################################
+# all participant pdf list download pdf download:#
+##################################################
 class DownloadPartPDF(View):
 
     def get(self, request, *args, **kwargs):
-
         participant = Participant.objects.all()
         participants = ParticipantFilter(request.GET, queryset=participant)
-        context = {'filter': participants}
+        date = datetime.date.today()
+        date = datetime.date.strftime(date, '%d-%b-%Y')
+        context = {'filter': participants, 'date': date}
         pdf = render_to_pdf('pages/pdf_part_list.html', context)
         response = HttpResponse(pdf, content_type='application/pdf')
-        filename = "Participant_%s.pdf" % ("12341231")
+        filename = 'Participants' + str(datetime.datetime.now()) + "_%s.pdf" % ("12341231")
         content = "attachment; filename=%s" % (filename)
         response['Content-Disposition'] = content
         return response
+
 
 ##################################################
 # session data filter | export csv | export pdf #
@@ -201,7 +260,7 @@ def search_sess(request):
 
 
 def export_search_pdf(request):
-    sess_filter = sess_filter_search
+    sess_filter = sess_filter_search()
     context = {'filter': sess_filter}
     result = render_to_pdf('pages/pdf_ses_print.html', context)
     return result
@@ -210,25 +269,32 @@ def export_search_pdf(request):
 def export_csv(request):
     session_old = Session.objects.all()
     sessions = sessionFilter(request.GET, queryset=session_old)
-
     responce = HttpResponse(content_type='text/csv')
     responce['Content-Disposition'] = 'attachment; filename=session search' + str(datetime.datetime.now()) + '.csv'
     writer = csv.writer(responce)
-    writer.writerow(['Activity name', 'Session type', 'Method', 'Project', 'Country', 'Total Participants'])
+    writer.writerow(['Activity name', 'Start Date', 'End Date', 'Session type', 'Method', 'Project', 'Country',
+                     'Total Participants', 'Trainer'])
 
     for item in sessions.qs:
-        writer.writerow([item.name_of_activity, item.session_type, item.method, item.project, item.country.name, item.attendees_number])
+        writer.writerow(
+            [item.name_of_activity, item.start_date, item.end_date, item.session_type, item.method, item.project,
+             item.country.name, item.attendees_number, item.get_trainer() + ' ' + item.get_trainer_last()])
     return responce
 
-# Automaticly downloads to PDF file
+##########################################
+# all session list download pdf download:#
+##########################################
+
 class DownloadSesPDF(View):
 
-
     def get(self, request, *args, **kwargs):
-
         session_old = Session.objects.all()
         sessions_q = sessionFilter(request.GET, queryset=session_old)
-        context = {'filter': sessions_q}
+        total_session = session_old.count()
+        date = datetime.date.today()
+        date = datetime.date.strftime(date, '%d-%b-%Y')
+
+        context = {'filter': sessions_q, 'total_session': total_session, 'date': date}
         pdf = render_to_pdf('pages/pdf_ses_print.html', context)
         response = HttpResponse(pdf, content_type='application/pdf')
         filename = "Session_%s.pdf" % ("12341231")
@@ -237,33 +303,11 @@ class DownloadSesPDF(View):
         return response
 
 
-##################################################################################################
-# class Test(ButtonAdmin):
-#     buttons = (
-#         Button('test', "A Test Button"),
-#         Button('redirect', "A redirect"),
-#     )
-#
-#     def tool_test(self, request, obj, button):
-#         session_list = Session.objects.all()
-#         sess_filter = sessionFilter(request.GET, queryset=session_list).qs
-#         context = {'filter': sess_filter, 'report_id': report_id}
-#
-#         return 'pages/search-ses.html', { context, "message" : "a test"}
-#
-#     def tool_redirect(self, request, obj, button):
-#         context = sess_filter
-#         result = render_to_pdf('pages/pdf_ses_print.html', context)
-#
-#         return HttpResponseRedirect('/render/pdf ')
-#
-#
-#
-#
-#
-#
-# Participant List Generic View
-##################################################################################################
+###########################
+# class Test(ButtonAdmin):#
+###########################
+
+
 
 class participantList(generic.ListView):
     template_name = 'pages/participant_list.html'
@@ -301,12 +345,13 @@ class sessionChart(TemplateView):
 #   PDF View
 ####################################################################################################
 
-
 def gen_pdf(request):
     # resp = HttpResponse(pdf, content_type='application/pdf')
     session = Session.objects.all().order_by("-pk")
     total_session = session.count()
-    context = {'session': session, 'total_session': total_session}
+    date = datetime.date.today()
+    date = datetime.date.strftime(date, '%d-%b-%Y')
+    context = {'session': session, 'total_session': total_session, 'date': date}
     result = render_to_pdf('pages/pdf_ses_temp.html', context)
     return result
 

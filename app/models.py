@@ -29,10 +29,12 @@ gender = (
 
 #-------------------------------------------------------# 
 title_Choice = (
+        ("Hon", "Hon"),
+        ("Dr", "Dr"),
         ("Mr", "Mr"),
         ("Mrs", "Mrs"),
-        ("Dr", "Dr"),
-        ("Hon", "Hon")
+        ("Ms", "Ms")
+
     )
 
 
@@ -135,6 +137,9 @@ class Organization(models.Model):
     special_general = models.CharField(choices= special_general_Choice, max_length=200, blank=True, null=True)   
     special_disaster_management = models.CharField(choices = special_disaster_management_Choice, max_length=100, blank=True, null=True)
     sector = models.CharField(choices= sector_Choice, max_length=100, blank=True, null=True)
+    address = models.TextField(blank=True, null=True)
+    phone_contact = models.CharField(max_length = 30, blank=True, null=True)
+
     def __str__(self):
         """String for representing the Model object (in Admin site etc.)"""
         return self.organization
@@ -145,6 +150,29 @@ class Organization(models.Model):
     def get_hostname(self):
         return "\n".join([s.hostname for s in self.host_participant.all()])
 
+
+class Trainer(models.Model):
+    first_name = models.CharField(max_length=100)
+    last_Name = models.CharField(max_length=100)
+    country = CountryField()
+    position = models.CharField(max_length=1000)
+    comments = models.TextField(blank=True, null=True)
+    organization = models.ManyToManyField(Organization, related_name = 'trainer_host_organization')
+    address = models.TextField(blank=True, null=True)
+    work_phone = models.CharField(max_length = 30, blank=True, null=True)
+    mobile_phone = models.CharField(max_length = 30, blank=True, null=True)
+    home_phone = models.CharField(max_length=30, blank=True, null=True)
+    email = models.EmailField(max_length=254, blank=True, null=True)
+    gender = models.CharField(choices= gender, max_length=50)
+    fax_number = models.CharField(max_length = 100, blank=True, null=True)
+
+
+    def get_trainer_org(self):
+
+        return self.organization.all()
+
+    def __str__(self):
+        return self.first_name
 
 class Participant(models.Model):
     title = models.CharField(choices= title_Choice, max_length=100, blank=True, null=True)
@@ -169,33 +197,36 @@ class Participant(models.Model):
     education_level = models.CharField(choices = education_level_choice, max_length=100, blank=True, null=True)
     comments = models.TextField(blank=True, null=True)
     #remove later
-    def get_verifed_req_count(self):
-        return id.Count()
+
+
+    @property
+    def get_registered_count(self):
+
+        return self.count()
 
     #def hostname(self):
        # return "\n".join([s.hostname for s in self.host_participant.all()], [p.ListOfParticpantsWhoCompletedCourse for p in self.courseparticipant.all])
 
     def get_course_completed(self):
+
         return "\n".join([p.ListOfParticpantsWhoCompletedCourse for p in self.courseparticipant.all])
 
     def __unicode__(self):
+
         return "{0}".format(self.first_name)
 
     def get_organization(self):
+
         return "\n".join([p.organization for p in self.organization.all()])
 
     def get_hostname(self):
+
         return '%s,%s' % ("\n".join([p.session for p in self.host_particpant.all()]), "\n".join([p.ListOfParticpantsWhoCompletedCourse for p in self.courseparticipant.all()]))
 
     def __str__(self):
         """String for representing the Model object (in Admin site etc.)"""
         return 'First name - %s, Surname - %s, Date of birth - %s, Gender - %s, Country - %s ' % (self.first_name,  self.last_Name, self.date_of_birth,self.gender, self.country)
 
-    #def get_absolute_url(self):
-    #    return reverse('Partcipant detail', args=[str(self.first_name)])
-
-
-  
 
 class Program(models.Model):
     project_name = models.CharField(max_length=100)
@@ -233,22 +264,57 @@ class Project(models.Model):
     def get_absolute_url(self):
         return reverse('Project detail', args=[str(self.project_name)])
 
+class Assesors(models.Model):
+    title = models.CharField(choices= title_Choice, max_length=100, blank=True, null=True)
+    first_name = models.CharField(max_length=100)
+    last_Name = models.CharField(max_length=100)
+    country = CountryField()
+    position = models.CharField(max_length=1000)
+    description = models.TextField(blank=True, null=True)
+
+    class Meta:
+        verbose_name = 'Assesor'
+        verbose_name_plural = 'Assesors'
+
+
+    def __str__(self):
+        """String for representing the Model object (in Admin site etc.)"""
+        return self.first_name
+
+
 class Course(models.Model):
     course_title = models.CharField(max_length= 100, blank=True, null=True)   
     program = models.ForeignKey(Program, on_delete=models.CASCADE, blank=True, null=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, null=True, blank=True)
     accredited = models.CharField(choices= accredited, max_length= 100, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
+    assessor = models.ManyToManyField(Assesors, blank=True, related_name='course_assessors')
     documents = models.FileField(null=True, blank=True)
-    #comments = models.CharField(max_length= 1000, blank=True, null=True)
 
-    
+
     def __str__(self):
         """String for representing the Model object (in Admin site etc.)"""
         return self.course_title
 
     def get_absolute_url(self):
         return reverse('Project detail', args=[str(self.documents)])
+
+    ##################################
+    # Get trainers Details
+    ##################################
+    def get_assessors_list(self):
+
+        return self.assessor.all()
+
+    def get_trainer(self):
+
+        return "\n".join([p.first_name for p in self.assessor.all()])
+
+    def get_trainer_last(self):
+
+        return "\n".join([p.last_Name for p in self.assessor.all()])
+
+
 
 class Unit(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, blank=True, null=True)
@@ -268,6 +334,7 @@ class Session(models.Model):
     session_type = models.CharField(choices=session_type_choices, max_length=50, blank=True, null=True)
     method = models.CharField(choices= method_Choice, blank=True, null=True, max_length=50)
     description = models.TextField(blank=True, null=True)
+    trainer = models.ManyToManyField(Trainer, related_name='Trainers',)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     course_unit_names = models.ForeignKey(Unit, on_delete=models.CASCADE, blank=True, null=True)
     course_units = models.ManyToManyField(Unit, related_name='course_units')
@@ -286,9 +353,26 @@ class Session(models.Model):
     def __unicode__(self):
         return "{0}".format(self.title)
 
+    ##################################
+    # Get trainers Details
+    ##################################
+    def get_trainer_list(self):
+
+        return self.trainer.all()
+
+    def get_trainer(self):
+
+        return "\n".join([p.first_name for p in self.trainer.all()])
+
+    def get_trainer_last(self):
+
+        return "\n".join([p.last_Name for p in self.trainer.all()])
+
+    ##################################
+    # Get Participants Details
+    ##################################
 
     def get_part_list(self):
-
 
         return self.participant.all()
 
@@ -296,9 +380,18 @@ class Session(models.Model):
 
         return "\n".join([p.first_name for p in self.participant.all()])
 
+
+    ##################################
+    # Return Session name
+    ##################################
+
     def __str__(self):
      #   """String for representing the Model object (in Admin site etc.)"""
         return ' %s ' % (self.name_of_activity)
+
+    ##################################
+    # urls
+    ##################################
 
     def get_absolute_url(self):
         return reverse('Session detail', args=[str(self.name_of_activity)])

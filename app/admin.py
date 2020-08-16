@@ -67,6 +67,8 @@ class SessionAdmin(ImportExportModelAdmin):
     filter_horizontal = ['participant']
     search_fields = ['name_of_activity']
     filter_horizontal = ['course_units']
+    filter_horizontal = ['trainer']
+    exclude = ('Course_unit_names',)
     view_on_site = True
 
 admin.site.register(Session, SessionAdmin)
@@ -94,4 +96,20 @@ class ProgramAdmin(admin.ModelAdmin):
 admin.site.register(Program, ProgramAdmin)
 
 
+
+from .models import Trainer
+
+class TrainerAdmin(ImportExportModelAdmin):
+    list_display = ('first_name', 'last_Name', 'country', 'position')
+    list_filter = ('first_name', 'last_Name', 'country', 'position')
+    search_fields = ['first_name', 'lastname','country']
+
+admin.site.register(Trainer, TrainerAdmin)
+
+from .models import Assesors
+
+class AssesorAdmin(ImportExportModelAdmin):
+    list_display = ('title', 'first_name', 'last_Name', 'country', 'position')
+
+admin.site.register(Assesors, AssesorAdmin)
 

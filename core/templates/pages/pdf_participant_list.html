@@ -1,4 +1,4 @@
-<h<head xmlns="http://www.w3.org/1999/html">
+<head xmlns="http://www.w3.org/1999/html">
     <style>
     @page {
         size: a4 portrait;
@@ -10,16 +10,19 @@
 
         }
         @frame content_frame {          /* Content Frame */
-            left: 50pt; width: 512pt; top: 120pt; height: 632pt;
-            text-align: left;
+            left: 50pt;
+            width: 512pt;
+            top: 120pt;
+            height: 632pt;
+            text-align: left !important;
+
+
         }
         @frame footer_frame {           /* Another static Frame */
             -pdf-frame-content: footer_content;
             left: 50pt; width: 512pt; top: 772pt; height: 20pt;
         }
-        .table, th, td {
-            text-align: left;
-        }
+
     }
 </style>
 </head>
@@ -31,7 +34,7 @@
 <div id="header_content">
 
     <div>
-        <img src="https://www.spc.int/sites/default/files/logo%20%282%29.png" width="80px"/>&nbsp;&nbsp;&nbsp; <strong> Geoscience, Energy and Maritime Division(GEM)</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+       <img src="https://www.spc.int/sites/default/files/logo%20%282%29.png" width="80px"/>&nbsp;&nbsp;&nbsp; <strong> Geoscience, Energy and Maritime Division(GEM)</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -39,61 +42,67 @@
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
         <strong > Disaster & Community Resilience Programme </strong>
     </div>
-
-
-
 </div>
 <!-- Content for Static Frame 'content-frame' -->
-<div>
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th>NAME</th>
-            <th>TYPE</th>
-            <th>METHOD</th>
-            <th>PROJECT</th>
-            <th>START DATE</th>
-            <th>END DATE</th>
-            <th>COURSE</th>
-            <th>ATTENDENCE</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for i in filter.qs %}
-        <tr>
-            <td>{{ i.name_of_activity}}</td>
-            <td>{{ i.session_type }}</td>
-            <td>{{ i.method }}</td>
-            <td>{{ i.project }}</td>
-            <td>{{ i.start_date}}</td>
-            <td>{{ i.end_date}}</td>
-            <td>{{ i.course}}</td>
-            <td>{{ i.attendees_number}}</td>
+    <div>
+        <div >
+            <span><strong>
+                {{session_data.session_type}}  {{session_data.method}} -  From : {{session_data.start_date}} to {{session_data.end_date}}, Conducted by  {{session_data.get_trainer}} {{session_data.get_trainer_last}} held in {{session_data.country.name}}
+                </strong>
+            </span>
+            <br/>
+            <br/>
+            <span>
+                <strong>{{session_data.name_of_activity}} Participants List</strong>
+            </span>
+            <div id="table">
+            <table repeat="1">
+                 <thead >
+                      <hr>
+                      <tr>
+                          <th style="text-align: left;" >NAME</th>
+                          <th style="text-align: left;" >GENDER</th>
+                          <th  style="text-align: left;">COUNTRY</th>
+                          <th  style="text-align: left;">EMAIL</th>
+                         <!-- <th  style="text-align: left;">WORKPHONE</th> -->
+                          <th  style="text-align: left;">ORGANIZATION</th>
+                      </tr>
+                 </thead>
+                 <tbody>
+                        {% for i in session_data.get_part_list %}
+                      <tr>
+                          <td >{{i.first_name}} {{i.last_Name}}</td>
+                          <td>{{i.gender}}</td>
+                          <td>{{i.country.name}} </td>
+                          <td>{{i.email}}</td>
+                          <!-- <td>{{i.work_phone}}</td> -->
+                           <td>{{i.get_organization}}</td>
+                       </tr>
+                         {% endfor %}
+                  </tbody>
+             </table>
+         </div>
+                       </span>
+         </div>
+     </div>
+     <div>
 
-            </td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="5">No data</td>
-        </tr>
-        {% endfor %}
-        </tbody>
-    </table>
 
-</div>
+             </div>
+ <hr>
+ <p><strong>Total Participants: {{session_data.attendees_number}}</strong></p>
 
-<hr>
-<p><strong>Total Training Conducted: {{total_session}}</strong></p>
-<hr>
 
-<!-- Content for Static Frame 'footer_frame' -->
+
+ <hr>
+
+ <!-- Content for Static Frame 'footer_frame' -->
 <div id="footer_content">(c) - page <pdf:pagenumber>
     of <pdf:pagecount>
 </div>
-
 </body>
 

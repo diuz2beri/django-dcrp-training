@@ -64,6 +64,11 @@
                                                 {% endfor %}
                                             </div>
                                         </div>
+                                        <div class="form-group col-sm-4 col-md-6">
+                                            {{ filter.form.start_date.label_tag }}
+                                            {% render_field filter.form.start_date class="form-control" %}
+                                        </div>
+
                                     </div>
 
                                     <button type="submit" class="btn btn-primary">
@@ -96,6 +101,8 @@
                                     <td>{{ sesssion.project }}</td>
                                     <td>
                                         <a class="btn btn-sm btn-primary" href = "{% url 'session' sesssion.id  %}" >view</a>
+                                        <a class="btn btn-sm btn-primary" href = "{% url 'pdf_ses_down' sesssion.id  %}" >download</a>
+
                                     </td>
                                 </tr>
                                 {% empty %}
