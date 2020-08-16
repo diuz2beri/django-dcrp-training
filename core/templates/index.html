@@ -7,10 +7,11 @@
 
 {% block content %}
 
-<script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+
     <!-- Header -->
-    <div class="header bg-gradient-primary pb-8 pt-5 pt-md-8">
-      <div class="container-fluid">
+    <div class="header pb-8 pt-5 pt-md-8" style="min-height: 450px; background-image: url(/static/assets/img/theme/profile-cover.jpg); background-size: cover; background-position: center top;">
+        <span class="mask bg-gradient-default opacity-8"></span>
+        <div class="container-fluid">
         <div class="header-body">
           <!-- Card stats -->
           <div class="row">
@@ -91,9 +92,8 @@
         </div>
       </div>
     </div>
-
+    <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
     <div class="container-fluid mt--7">
-
      <div class="row">
         <div class="col-6">
           <div class="card shadow border-0">
@@ -124,10 +124,10 @@
                         </table>
                     </div></div>
         </div>
-                                  <div class="col-6">
-                                  <div class="card shadow border-0">
-                                    <a href="{% url 'create_session' %}" type="button" class="btn btn-success btn-block">Enter New Session</a>
-                                          <table class="table table-striped">
+                  <div class="col-6">
+                  <div class="card shadow border-0">
+                    <a href="{% url 'create_session' %}" type="button" class="btn btn-success btn-block">Enter New Session</a>
+                          <table class="table table-striped">
                           <thead>
                             <tr>
 
@@ -142,9 +142,7 @@
                                     <tr>
                                     <td>{{i.name_of_activity}}</td>
                                     <td>{{i.country}}</td>
-                                    <!--<td>{{i.attendees_number}}</td>-->
-                                    <!--<td>{{i.participant.last_Name|linebreaks}}</td>-->
-                                        <td><a class="btn btn-sm btn-primary" href = "{% url 'session' i.id  %}" >view</a></td>
+                                    <td><a class="btn btn-sm btn-primary" href = "{% url 'session' i.id  %}" >view</a></td>
                                     </tr>
                             {% endfor %}
                           </tbody>
@@ -157,69 +155,99 @@
      
  
 <!--Chart--><br/>
-      <div class="row">
-        <div class="col-xl-8 mb-5 mb-xl-0">
-          <div class="card ">
-            <div id="myChart">
-    
-    <script>
-      var chartData = {
-        type:"bar",
-        "title": {
-    "text": "Participants By County",
-    "fontSize": 18
-  },
-  "subtitle": {
-    "text": "adjust the properties to re-animate the chart"
-  },
-  "plot": {
-    "animation": {
-      "delay": "300",
-      "effect": "4",
-      "method": "5",
-      "sequence": "1"
-    }
-  },
-        "scale-x":{
-            "values":["Fiji","Samoa","Tonga","Kiribati","Tuvalu","Niue","Png","vanuatu","Solomon Islans"]
-            },
-            "series":[  {          
-              "values":[13,34,28,32,45,70,80,46,25]
-              } 
-            ]
-         }
-          
-      
-      zingchart.render({
-        id: "myChart",
-        data: chartData, 
-      });        
-          
-     
-      
-    </script>
-          </div>
+    <div class="row">
+    <div class="col-xl-7 mb-5 mb-xl-0">
+      <div class="card ">
+        <div id="myChart">
 
-  
+                <script>
+                  var chartData = {
+                    type:"bar",
+                    "title": {
+                "text": "Sessions By County",
+                "fontSize": 18
+                },
+                "subtitle": {
+                "text": "Number of trainings Carried out per Countries"
+                },
+                "plot": {
+                "animation": {
+                  "delay": "300",
+                  "effect": "4",
+                  "method": "5",
+                  "sequence": "1"
+                }
+                },
+                    "scale-x":{
+                        "values":{{ labels|safe }},
+                        },
+                        "series":[  {
+                          "values":{{ data|safe }}
+                          }
+                        ]
+                     }
+
+
+                  zingchart.render({
+                    id: "myChart",
+                    data: chartData,
+                  });
+
+
+
+                </script>
+          </div>
     </div>
     </div>
             
-        <div class="col-xl-4">
+        <div class="col-xl-5">
           <div class="card shadow">
             <div class="card-header bg-transparent">
               <div class="row align-items-center">
                 <div class="col">
-                  <h6 class="text-uppercase text-muted ls-1 mb-1">GENDER</h6>
-                  <h2 class="mb-0">Total Gender</h2>
+                  <h6 class="text-uppercase text-muted ls-1 mb-1">Participants Genders</h6>
+                  <h2 class="mb-0">GENDER TYPE</h2>
                 </div>
+
               </div>
             </div>
 
             <div class="card-body">
-              <!-- Chart -->
-              <div class="chart">
-                <canvas id="chart-orders" class="chart-canvas"></canvas>
-              </div>
+              <!-- Chart --><br/><br/>
+                <div id="container" style="width: 100%; height:350px">
+                    <canvas id="pie-chart"></canvas>
+                </div>
+                <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+                <script>
+
+                    var config = {
+                      type: 'pie',
+                      data: {
+                        datasets: [{
+                          data: {{ data2|safe }},
+                          backgroundColor: [
+                            '#003f5c', '#ff764a', '#ffa600'
+                          ],
+                          label: 'Gender Type'
+                        }],
+                        labels: {{ labels2|safe }}
+                      },
+                      options: {
+                        legend: {
+                          display: true
+                            }
+
+                      }
+
+                    };
+
+                    window.onload = function() {
+                      var ctx = document.getElementById('pie-chart').getContext('2d');
+                      window.myPie = new Chart(ctx, config);
+                    };
+
+                </script>
+
             </div>
           </div>
         </div>
@@ -232,12 +260,8 @@
     <script>
     {% block jquery %}
       var endpoint = '/api/data/'
-
-
      {% endblock %}
     </script>
-
-
 </div>
 
 

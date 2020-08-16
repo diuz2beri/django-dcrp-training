@@ -58,6 +58,7 @@ urlpatterns = [
     ############
 
     path('pdf_ses_view/', views.GenerateSesPdf.as_view(), name="pdf_ses_view"),
+
     path('render/pdf/', views.gen_pdf, name='pdf_download'),
     path('ses_list/<str:pk>', views.gen_pdf_partList, name='ses_list'),
     path('render/pdf/print', views.export_search_pdf, name='search-pdf'),
@@ -65,7 +66,8 @@ urlpatterns = [
     re_path(r'session_pdf/$', views.DownloadSesPDF.as_view(), name="ses_download"),
     re_path(r'^export/part/$', views.export_part_csv, name='export_part_csv'),
     re_path(r'participant_pdf/$', views.DownloadPartPDF.as_view(), name="part_download"),
+    url(r'pdf_ses_down/(?P<id>\d+)/$', views.ViewPDFSesion.as_view(), name="pdf_ses_down"),
 
 ]
 
-# url(r'^admin/login/$', django_saml2_auth.views.signin)
+# url(r'^admin/login/$', django_saml2_auth.views.signin) path('pdf_list/', views.SesListPDF.as_view(), name="pdf_list"),
