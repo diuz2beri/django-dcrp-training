@@ -21,7 +21,7 @@ django-rest-auth==0.9.5
 django-saml2-auth==2.2.1
 django-sb-admin==5.5.1.1
 django-widget-tweaks==1.4.8
-djangorestframework==3.11.0
+djangorestframework==3.11.2
 djangorestframework-jwt==1.11.0
 et-xmlfile==1.0.1
 filters==1.3.2
