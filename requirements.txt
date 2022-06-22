@@ -30,7 +30,7 @@ html5lib==1.1
 idna==2.10
 jdcal==1.4.1
 MarkupPy==1.14
-numpy==1.19.1
+numpy==1.22.0
 odfpy==1.4.1
 openpyxl==3.0.4
 pandas==1.0.5
